@@ -1,0 +1,10 @@
+out
+node_modules
+.vscode-test/
+*.vsix
+coverage
+.idea
+package-lock.json
+.DS_*
+.nodejs-cache
+dist

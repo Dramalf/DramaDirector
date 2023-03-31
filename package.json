@@ -1,0 +1,48 @@
+{
+  "name": "dramadirector",
+  "version": "1.0.0",
+  "description": "Nodejs video/lottie/audio/text/image schema composition service based on ffmpeg",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "demo": " node ./example/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dramalf/DramaDirector.git"
+  },
+  "keywords": [
+    "nodejs",
+    "ffmpeg",
+    "composition"
+  ],
+  "author": "Dramalf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dramalf/DramaDirector/issues"
+  },
+  "homepage": "https://github.com/Dramalf/DramaDirector#readme",
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@ffprobe-installer/ffprobe": "^1.4.1",
+    "@types/fluent-ffmpeg": "^2.1.21",
+    "canvas": "^2.11.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "lottie-nodejs": "^1.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^16.16.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5",
+    "urllib": "^3.11.0"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true
+  }
+}
