@@ -10,6 +10,7 @@ npm run demo
 * 【optional】By excuting `npm run demo 1` , generate the video by stream mode.
 * Then you can see **demo.mp4** in example folder.
 
+
 ## 💫 How to generate a schema for your own composition?
 You can refer to the schema.js in the demo folde. The example in this file includes the basic attributes required for the basic elements in video composition.
 
@@ -101,9 +102,9 @@ Basically, the schema comprises basic info(name,width,height,duration) and layer
 By using ffmpeg-utils in effects, you can even achieve the effect of keyframe animation.
 
 ## Consume the schema
-
+* `npm i dramadirector` 
 ```javascript
-const DramaCore = require('../dist').default
+const DramaCore = require('dramadirector').default
 // The schema described how the product is organized
 const darmaSchema = require('./schema')
 const path = require('path')
