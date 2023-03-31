@@ -10,6 +10,8 @@ npm run demo
 * 【optional】By excuting `npm run demo 1` , generate the video by stream mode.
 * Then you can see **demo.mp4** in example folder.
 
+https://user-images.githubusercontent.com/43701793/229109890-c33b6968-5309-4260-901b-690a781b1ff5.mp4
+
 
 ## 💫 How to generate a schema for your own composition?
 You can refer to the schema.js in the demo folde. The example in this file includes the basic attributes required for the basic elements in video composition.
