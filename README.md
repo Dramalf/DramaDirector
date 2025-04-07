@@ -14,7 +14,7 @@ https://user-images.githubusercontent.com/43701793/229109890-c33b6968-5309-4260-
 
 
 ## 💫 How to generate a schema for your own composition?
-You can refer to the schema.js in the demo folde. The example in this file includes the basic attributes required for the basic elements in video composition.
+You can refer to the schema.js in the demo folder. The example in this file includes the basic attributes required for the basic elements in video composition.
 
 Basically, the schema comprises basic info(name,width,height,duration) and layers info. And each layer comprises several or single items.
 
