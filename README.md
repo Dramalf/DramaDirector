@@ -64,6 +64,25 @@ with a clear, located error and a non-zero exit.
 Run `drama --help` for the full surface, or read on for the underlying
 [`DramaSession`](#-agent-friendly-api-dramasession) it wraps.
 
+### Drop-in Claude Code skill
+
+The repo ships a portable Claude Code skill at `.claude/skills/drama/SKILL.md`.
+Drop it into any video-generation project so the agent already knows how to
+drive the CLI:
+
+```shell
+# Per-project (recommended): commit it alongside your other project skills
+mkdir -p /path/to/other-project/.claude/skills
+cp -r .claude/skills/drama /path/to/other-project/.claude/skills/
+
+# Or globally for your user (auto-updating symlink to this repo)
+mkdir -p ~/.claude/skills
+ln -s "$(pwd)/.claude/skills/drama" ~/.claude/skills/drama
+```
+
+The skill assumes `dramadirector` is installed in the target project
+(`npm i dramadirector`) so `npx drama …` works.
+
 ## 🤖 Agent-friendly API: `DramaSession`
 
 A session holds a mutable composition. You add **clips**; each clip names a
