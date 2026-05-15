@@ -8,3 +8,9 @@ package-lock.json
 .DS_*
 .nodejs-cache
 dist
+
+# generated test / demo artifacts
+test/fixtures
+test/.out
+example/demo.mp4
+example/session-demo.mp4

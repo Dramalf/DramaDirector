@@ -3,13 +3,18 @@
   "version": "1.0.1",
   "description": "Nodejs video/lottie/audio/text/image schema composition service based on ffmpeg",
   "main": "dist/index.js",
+  "bin": {
+    "drama": "bin/drama.js"
+  },
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "bin/**/*"
   ],
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
     "demo": "node ./example/index.js",
+    "demo:session": "node ./example/session.js",
     "test": "npm run build && node --test test/*.test.js",
     "prepublishOnly": "npm run build"
   },
