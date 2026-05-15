@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
-    "demo": " node ./example/index.js",
+    "demo": "node ./example/index.js",
     "prepublishOnly": "npm run build"
   },
   "repository": {
@@ -31,15 +31,14 @@
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^1.4.1",
     "@types/fluent-ffmpeg": "^2.1.21",
-    "canvas": "^2.11.0",
-    "dramadirector": "^1.0.1",
+    "canvas": "^3.2.3",
     "fluent-ffmpeg": "^2.1.2",
     "lottie-nodejs": "^1.1.5"
   },
   "devDependencies": {
-    "@types/node": "^16.16.0",
+    "@types/node": "^25.8.0",
     "tslint": "^6.1.2",
-    "typescript": "^3.9.5",
+    "typescript": "^6.0.3",
     "urllib": "^3.11.0"
   },
   "prettier": {

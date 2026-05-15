@@ -1,15 +1,14 @@
-import DramaObserver from "../../Core/observer";
-import VideoItemProducer from "../item/video";
-import AudioItemProducer from "../item/audio";
 export default class MultiLayersProducer implements DramaMultiLayerProducer {
     layers: DramaLayer[]
-    constructor(layers) {
+    ctx: DramaContext
+    constructor(layers: DramaLayer[], ctx: DramaContext) {
         this.layers = layers;
+        this.ctx = ctx;
     }
     getFilters() {
         const visibleLayers = this.layers.filter(layer => layer.type !== 'audio');
         // const audioLayers = this.layers.filter(layer => layer.type === 'audio');
-        const audioOutputsList=[...VideoItemProducer.AudioOutputsList,...AudioItemProducer.AudioOutputsList].filter(Boolean)
+        const audioOutputsList = this.ctx.audioOutputs.filter(Boolean)
         let outv = null, outa = null;
         const overlayFilters = [];
         let volumeFilters = [];
@@ -41,9 +40,13 @@ export default class MultiLayersProducer implements DramaMultiLayerProducer {
             outv = nextLayer;
         }
         // 合成最终音频输出
-        if(audioOutputsList?.length===1){
-            outa=audioOutputsList[0];
-        }else{
+        if (audioOutputsList.length === 0) {
+            // No audio anywhere — produce a video-only output rather than
+            // feeding `amix` zero inputs (which fails with "Result too large").
+            outa = null;
+        } else if (audioOutputsList.length === 1) {
+            outa = audioOutputsList[0];
+        } else {
             const amixFilter:DramaFilterforFFmpeg = {
                 inputs:audioOutputsList,
                 filter:'amix',
@@ -62,8 +65,8 @@ export default class MultiLayersProducer implements DramaMultiLayerProducer {
             volumeFilters.push(amixFilter, setVolumeFilter)
             outa = 'audio-all-output'
         }
-        DramaObserver.baseInfo.outv = outv;
-        DramaObserver.baseInfo.outa = outa;
+        this.ctx.baseInfo.outv = outv;
+        this.ctx.baseInfo.outa = outa;
         return [...overlayFilters, ...volumeFilters].filter(Boolean)
     }
 }

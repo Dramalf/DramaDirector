@@ -1,21 +1,20 @@
-export default class DramaObserver {
-    static baseInfo: {
-        w: number,
-        h: number,
-        d: number,
-        outv: string,
-        outa: string
-    } = { w: 0, h: 0, d: 0, outv: null, outa: null }
+export default class DramaObserver implements DramaContext {
+    baseInfo: DramaBaseInfo
+    audioOutputs: string[] = []
     schema: DramaSchema
     layers: DramaLayer[] = []
     itemsMap: { [key: string]: DramaItem } = {}
     textLayer: DramaItem[] = []
     constructor(schema: DramaSchema) {
         this.schema = schema;
-        this.layers = schema.layers;   
-        DramaObserver.baseInfo.w = schema.w;
-        DramaObserver.baseInfo.h = schema.h;
-        DramaObserver.baseInfo.d = schema.d;
+        this.layers = schema.layers;
+        this.baseInfo = {
+            w: schema.w,
+            h: schema.h,
+            d: schema.d,
+            outv: null,
+            outa: null
+        };
         this.generateItemsMap();
     }
 
@@ -26,7 +25,7 @@ export default class DramaObserver {
         _layers.forEach(layer => {
             let preItem = null
             if (layer.type === 'lottie') {
-                layer.inputIndex=inputIndex;
+                layer.inputIndex = inputIndex;
                 inputIndex++
             }
             layer?.items?.forEach(item => {
@@ -36,8 +35,8 @@ export default class DramaObserver {
                 } else {
                     this.textLayer.push(item);
                 }
-                const et=item?.config?.et||0;
-                if(et>DramaObserver.baseInfo.d)DramaObserver.baseInfo.d=et
+                const et = item?.config?.et || 0;
+                if (et > this.baseInfo.d) this.baseInfo.d = et
                 this.itemsMap[item.id] = item;
                 item.preItem = preItem;
                 preItem = item;

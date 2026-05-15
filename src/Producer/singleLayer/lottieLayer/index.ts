@@ -1,11 +1,12 @@
-import DramaObserver from "../../../Core/observer";
 import LottieStream from "./LottieStream";
 export default class LottieLayerProducer implements DramaSingleLayerProducer{
     layer: DramaLayer
+    ctx: DramaContext
     lottieStream: LottieStream
-    constructor(layer: DramaLayer) {
+    constructor(layer: DramaLayer, ctx: DramaContext) {
         this.layer = layer;
-        const { w, h } = DramaObserver.baseInfo;
+        this.ctx = ctx;
+        const { w, h } = ctx.baseInfo;
         this.lottieStream = new LottieStream(w, h);
     }
     getStream() {

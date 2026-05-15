@@ -5,32 +5,50 @@ import TextLayerProducer from './singleLayer/textLayer'
 import NormalLayerProducer from './singleLayer/normalLayer'
 import LottieLayerProducer from './singleLayer/lottieLayer'
 import MultiLayersProducer from './multiLayers'
-class NullProducer{
-    getFilters(){
+class NullProducer {
+    ctx: DramaContext
+    constructor(_target?: any, ctx?: DramaContext) {
+        this.ctx = ctx;
+    }
+    getFilters() {
         return []
     }
 }
 const ItemProduceMap = {
     video: VideoItemProducer,
     audio: AudioItemProducer,
-    image:ImageItemProducer,
-    text:NullProducer,
-    lottie:NullProducer
+    image: ImageItemProducer,
+    text: NullProducer,
+    lottie: NullProducer
 }
 const SingleLayerProducerMap = {
     text: TextLayerProducer,
     normal: NormalLayerProducer,
-    audio:NullProducer,
-    lottie:LottieLayerProducer
+    audio: NullProducer,
+    lottie: LottieLayerProducer
 }
-export function generateItemProducer(item) {
+export function generateItemProducer(item: DramaItem, ctx: DramaContext) {
     const { type } = item;
-    return new ItemProduceMap[type](item);
+    const Producer = ItemProduceMap[type];
+    if (!Producer) {
+        throw new Error(
+            `Unknown item type "${type}" (item id: "${item.id}"). ` +
+            `Expected one of: ${Object.keys(ItemProduceMap).join(', ')}.`
+        );
+    }
+    return new Producer(item, ctx);
 }
-export function generateSingleLayerProducer(layer) {
+export function generateSingleLayerProducer(layer: DramaLayer, ctx: DramaContext) {
     const { type } = layer;
-    return new SingleLayerProducerMap[type](layer);
+    const Producer = SingleLayerProducerMap[type];
+    if (!Producer) {
+        throw new Error(
+            `Unknown layer type "${type}" (layer index: ${layer.index}). ` +
+            `Expected one of: ${Object.keys(SingleLayerProducerMap).join(', ')}.`
+        );
+    }
+    return new Producer(layer, ctx);
 }
-export function generateMultiLayerProducer(layers){
-    return new MultiLayersProducer(layers);
+export function generateMultiLayerProducer(layers: DramaLayer[], ctx: DramaContext) {
+    return new MultiLayersProducer(layers, ctx);
 }

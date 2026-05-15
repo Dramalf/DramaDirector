@@ -1,9 +1,10 @@
 import stringRandom from "../../../Utils/string-random";
 export default class AudioItemProducer implements DramaItemProducer {
-    static AudioOutputsList:string[]=[]
     item: DramaItem
-    constructor(item: DramaItem) {
+    ctx: DramaContext
+    constructor(item: DramaItem, ctx: DramaContext) {
         this.item = item;
+        this.ctx = ctx;
         item.filter_output = `${item.id}-item`;
     }
     getFilters() {
@@ -30,7 +31,7 @@ export default class AudioItemProducer implements DramaItemProducer {
                 options: `${st * 1000}|${st * 1000}`,
                 outputs: `${id}-item`
             })
-            AudioItemProducer.AudioOutputsList.push(`${id}-item`);
+            this.ctx.audioOutputs.push(`${id}-item`);
         return filterList;
     }
     getInputOptions() {

@@ -1,40 +1,20 @@
-import DramaObserver from "../../../Core/observer";
+import { createTransparentBg } from "../../../Utils/filters";
 export default class TextLayerProducer implements DramaSingleLayerProducer {
     layer: DramaLayer
-    constructor(layer) {
+    ctx: DramaContext
+    constructor(layer: DramaLayer, ctx: DramaContext) {
         this.layer = layer;
+        this.ctx = ctx;
     }
     getFilters() {
         const textNum=this.layer?.items?.length;
         if (!textNum) {
             return []
         }
-        const { w, h } = DramaObserver.baseInfo
+        const { w, h } = this.ctx.baseInfo
         const d = this.layer?.items.reduce((pre, cur) => { return Math.max(cur.config.et, pre) }, 0)
         let lastOutputName = '';
-        const blackBgFilters: DramaFilterforFFmpeg[] = [{
-            filter: 'nullsrc',
-            options: {
-                size: `${w}x${h}`,
-                duration: d,
-            },
-            outputs: 'text-layer-nullsrc'
-        },
-        {
-            inputs: 'text-layer-nullsrc',
-            filter: 'format',
-            options: 'rgba',
-            outputs: 'text-layer-format'
-        },
-        {
-            inputs: 'text-layer-format',
-            filter: 'colorchannelmixer',
-            options: {
-                aa: 0
-            },
-            outputs: 'text-layer-bg'
-        }
-        ];
+        const blackBgFilters: DramaFilterforFFmpeg[] = createTransparentBg('text-layer', w, h, d, 'text-layer-bg');
         lastOutputName = 'text-layer-bg';
         let drawTextFilters: DramaFilterforFFmpeg[] = this.layer?.items?.map((item,index) => {
             const { id,

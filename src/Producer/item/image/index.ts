@@ -1,50 +1,27 @@
-import DramaObserver from "../../../Core/observer";
 import stringRandom from "../../../Utils/string-random";
+import { createTransparentBg, createPreBlackFill } from "../../../Utils/filters";
 export default class ImageItemProducer implements DramaItemProducer {
     item: DramaItem
-    constructor(item: DramaItem) {
+    ctx: DramaContext
+    constructor(item: DramaItem, ctx: DramaContext) {
         this.item = item;
+        this.ctx = ctx;
         item.filter_output = item.id + '-item';
     }
     getPreBlackFill() {
-        const { preItem, config: curItemConfig, id, type } = this.item;
-
-        let preItemEt = preItem?.config?.et || 0;
-        const blackFillTime = curItemConfig.st - preItemEt
-        if (blackFillTime <= 0) return null
-        const { w, h } = DramaObserver.baseInfo;
-        this.item.preBlackFill = `${id}-pbf`;
-        return [
-            {
-                filter: 'nullsrc',
-                options: {
-                    size: `${w}x${h}`,
-                    duration: `${blackFillTime}`
-                },
-                outputs: `${id}-nullsrc`
-            },
-            {
-                inputs: `${id}-nullsrc`,
-                filter: 'format',
-                options: 'rgba',
-                outputs: `${id}-nullsrc-format`
-            },
-            {
-                inputs: `${id}-nullsrc-format`,
-                filter: 'colorchannelmixer',
-                options: {
-                    aa: 0
-                },
-                outputs: `${id}-pbf`
-            },
-        ]
+        const { preItem, config: curItemConfig, id } = this.item;
+        const preItemEt = preItem?.config?.et || 0;
+        const { w, h } = this.ctx.baseInfo;
+        const pbf = createPreBlackFill(id, w, h, curItemConfig.st - preItemEt);
+        if (pbf) this.item.preBlackFill = `${id}-pbf`;
+        return pbf;
     }
     getFilters() {
         const pbf = this.getPreBlackFill();
         const { effects, inputIndex, id, config, preBlackFill } = this.item;
         const { st, et, x, y } = config;
         let lastOutputName = `${inputIndex}`
-        const filterList: any[] = effects?.map(effect => {
+        const filterList: DramaFilterforFFmpeg[] = effects?.map(effect => {
 
             const { nm: effectName, options } = effect;
 
@@ -58,30 +35,9 @@ export default class ImageItemProducer implements DramaItemProducer {
             return filter
         }) || [];
         preBlackFill && filterList.push(...pbf);
-        const { w, h } = DramaObserver.baseInfo;
+        const { w, h } = this.ctx.baseInfo;
         filterList.push(
-            {
-                filter: 'nullsrc',
-                options: {
-                    size: `${w}x${h}`,
-                    duration: `${et - st}`
-                },
-                outputs: `${id}-nullsrc`
-            },
-            {
-                inputs: `${id}-nullsrc`,
-                filter: 'format',
-                options: 'rgba',
-                outputs: `${id}-nullsrc-format`
-            },
-            {
-                inputs: `${id}-nullsrc-format`,
-                filter: 'colorchannelmixer',
-                options: {
-                    aa: 0
-                },
-                outputs: `${id}-bg`
-            },
+            ...createTransparentBg(id, w, h, et - st, `${id}-bg`),
             {
                 inputs: [`${id}-bg`, lastOutputName],
                 filter: 'overlay',

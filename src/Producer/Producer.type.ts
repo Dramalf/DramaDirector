@@ -8,6 +8,7 @@ declare global {
         options?: string | number | { [x: string]: string | number } | null
     }
     class DramaProducer {
+        ctx: DramaContext
         getFilters(): (string | DramaFilterforFFmpeg)[]
         getInputOptions?(): string[]
         getPreBlackFill?(): (string | DramaFilterforFFmpeg)[]

@@ -1,7 +1,9 @@
 export default class NormalLayerProducer implements DramaSingleLayerProducer {
     layer: DramaLayer
-    constructor(layer) {
+    ctx: DramaContext
+    constructor(layer: DramaLayer, ctx: DramaContext) {
         this.layer = layer;
+        this.ctx = ctx;
     }
     getFilters() {
         const itemList = this.layer?.items || []

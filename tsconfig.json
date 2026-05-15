@@ -4,9 +4,13 @@
     "target": "ES2018",
     "module": "commonjs",
     "moduleResolution": "node",
+    "rootDir": "src",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "inlineSourceMap": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
     "noImplicitThis": false,
     "noUnusedLocals": false,
     "stripInternal": false,
@@ -15,7 +19,8 @@
     "allowSyntheticDefaultImports": true,
     "outDir": "dist",
     "esModuleInterop": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "ignoreDeprecations": "6.0"
   },
   "exclude": ["dist", "node_modules", "**/__tests__"]
 }

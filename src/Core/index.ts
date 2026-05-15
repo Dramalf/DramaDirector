@@ -9,11 +9,15 @@ export default class DramaCore extends DramaObserver {
         super(schema);
     }
     produce() {
+        // Reset per-run state so the same instance can be reused safely.
+        this.audioOutputs = [];
+        this.baseInfo.outv = null;
+        this.baseInfo.outa = null;
         this.layers.forEach(layer => {
             layer?.items?.forEach(item => {
-                item.producer = generateItemProducer(item);
+                item.producer = generateItemProducer(item, this);
             })
-            layer.producer = generateSingleLayerProducer(layer)
+            layer.producer = generateSingleLayerProducer(layer, this)
         })
     }
     consume(): FfmpegCommand.FfmpegCommand {
@@ -26,8 +30,8 @@ export default class DramaCore extends DramaObserver {
         });
         command.complexFilter(filters,
             [
-                DramaObserver.baseInfo.outv,
-                DramaObserver.baseInfo.outa,
+                this.baseInfo.outv,
+                this.baseInfo.outa,
             ].filter(Boolean));
 
 
@@ -70,7 +74,7 @@ export default class DramaCore extends DramaObserver {
             })
             filters.push(...layer.producer.getFilters());
         })
-        filters.push(...generateMultiLayerProducer(this.layers).getFilters())
+        filters.push(...generateMultiLayerProducer(this.layers, this).getFilters())
         return filters.filter(filterItem => filterItem)
     }
 
@@ -87,7 +91,7 @@ export default class DramaCore extends DramaObserver {
         this.produce();
         const command = await this.consume();
         command.outputOptions([
-            '-ss', '0', '-t', `${DramaObserver.baseInfo.d}`,
+            '-ss', '0', '-t', `${this.baseInfo.d}`,
             '-c:v', 'libx264',
             '-threads', '8',
             '-crf', '18',

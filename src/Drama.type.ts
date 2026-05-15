@@ -24,10 +24,12 @@ declare global {
 
     interface DramaItem {
         id: string,
-        url: string
+        // text and lottie items have no external url; only video/image/audio do.
+        url?: string
         type: string,
         config: DramaItemConfig,
-        effects: DramaItemEffect[],
+        // text items carry their styling in config and need no effects.
+        effects?: DramaItemEffect[],
         stream?: PassThrough | Readable,
         inputFile?: string | PassThrough | Readable,
         lottie?: any
@@ -57,6 +59,22 @@ declare global {
     interface DramaInputForFFmpeg {
         url: string | Readable,
         inputOptions: string[]
+    }
+
+    interface DramaBaseInfo {
+        w: number,
+        h: number,
+        d: number,
+        outv: string | null,
+        outa: string | null
+    }
+
+    // Per-run state shared between the core and every producer.
+    // Threaded explicitly so multiple compositions can run concurrently
+    // without clobbering each other (previously this was static state).
+    interface DramaContext {
+        baseInfo: DramaBaseInfo,
+        audioOutputs: string[]
     }
 
 }
