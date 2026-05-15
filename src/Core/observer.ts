@@ -1,3 +1,5 @@
+import { validateSchema } from "../Utils/validate";
+
 export default class DramaObserver implements DramaContext {
     baseInfo: DramaBaseInfo
     audioOutputs: string[] = []
@@ -6,6 +8,7 @@ export default class DramaObserver implements DramaContext {
     itemsMap: { [key: string]: DramaItem } = {}
     textLayer: DramaItem[] = []
     constructor(schema: DramaSchema) {
+        validateSchema(schema);
         this.schema = schema;
         this.layers = schema.layers;
         this.baseInfo = {

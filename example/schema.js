@@ -275,7 +275,7 @@ module.exports = {
                     }
                 },
                 {
-                    id: "t3",
+                    id: "t4",
                     type: "text",
                     config: {
                         text: "很丑的画中画，谁懂啊",
@@ -293,7 +293,7 @@ module.exports = {
                     }
                 },
                 {
-                    id: "t3",
+                    id: "t5",
                     type: "text",
                     config: {
                         text: "看看西湖美景吧家人们",
@@ -311,7 +311,7 @@ module.exports = {
                     }
                 },
                 {
-                    id: "t3",
+                    id: "t6",
                     type: "text",
                     config: {
                         text: "这里有个logo哦=>",
